@@ -28,8 +28,8 @@ namespace DeckSorter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var shufflerClassName = Configuration.GetChildren().First(item => item.Key == "Shuffler").Value;
-            var deckStorageClassName = Configuration.GetChildren().First(item => item.Key == "DeckStorage").Value;
+            var shufflerClassName = Configuration.GetValue("Shuffler", "SimpleShffler");
+            var deckStorageClassName = Configuration.GetValue("DeckStorage", "InMemoryDeckStorage");
             var assemblyName = typeof(Deck).Assembly.GetName().Name;
             var namespaceName = typeof(Deck).Namespace;
 
