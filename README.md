@@ -3,16 +3,19 @@
 RESTful сервис, предоставляющий интерфейc:
 
 1. Создать именованную колоду карт (колода создаётся упорядоченной)
-POST /decks
+    ```POST /decks```
 
 2. Удалить именованную колоду
-DELETE /decks/{name}
+    ```DELETE /decks/{name}```
 
 3. Получить список названий колод
-GET /decks/names
+    ```GET /decks/names```
 
 4. Перетасовать колоду
-POST /decks/{name}/shuffle
+    ```POST /decks/{name}/shuffle```
 
 5. Получить колоду по имени (в её текущем упорядоченном/перетасованном состоянии)
-GET /decks/{name}
+    ```GET /decks/{name}```
+
+
+Алгоритм перетасовки и сущность БД задается в ```appsettings.json```.
