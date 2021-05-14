@@ -21,7 +21,6 @@ namespace DeckSorterTests
         [SetUp]
         public void SetUp()
         {
-            
             deckStorageMock = new Mock<IDeckStorage>();
             shufflerMock = new Mock<IShuffler>();
             controller = new DecksController(deckStorageMock.Object, shufflerMock.Object);
@@ -32,16 +31,16 @@ namespace DeckSorterTests
            get
            {
                yield return new TestCaseData(anyDeckName, typeof(OkObjectResult),
-                   true, true, false).SetName("ReturnsOk_WhenNothingWrong");
+                   true, true, false).SetName("ShouldReturnOk_WhenNothingWrong");
                yield return new TestCaseData(anyDeckName, typeof(BadRequestObjectResult),
-                   false, true, true).SetName("ReturnsBadRequest_WhenStorageAlreadyContainsDeck");
+                   false, true, true).SetName("ShouldReturnBadRequest_WhenStorageAlreadyContainsDeck");
                yield return new TestCaseData(forbiddenDeckName, typeof(BadRequestObjectResult),
-                   false, true, false).SetName("ReturnsBadRequest_WhenDeckHasForbiddenName");
+                   false, true, false).SetName("ShouldReturnBadRequest_WhenDeckHasForbiddenName");
            }
         }
         
         [TestCaseSource(nameof(CreateCases))]
-        public void ControllerCreatesDeck(string deckName, Type expectedResultType, bool insertMethodCalled,
+        public void CreateDeckTest(string deckName, Type expectedResultType, bool insertMethodCalled,
                                           bool insertMethodReturnValue, bool storageAlreadyContainsDeck)
         {
             deckStorageMock.Setup(storage =>
@@ -60,7 +59,7 @@ namespace DeckSorterTests
         }
 
         [Test]
-        public void ControllerGetsDeck()
+        public void ShouldGetDeckByName()
         {
             var namedDeck = new Deck(anyDeckName, new List<Card>());
             deckStorageMock.Setup(storage =>
@@ -73,7 +72,7 @@ namespace DeckSorterTests
         }
         
         [Test]
-        public void ControllerGetsAllDeckNames()
+        public void ShouldGetAllDeckNames()
         {
             var deckList = new List<Deck>
             {
@@ -83,7 +82,7 @@ namespace DeckSorterTests
             deckStorageMock.Setup(storage =>
                 storage.GetAll()).Returns(deckList);
             
-            var result = controller.GetDeckNames();
+            var result = controller.GetAllDeckNames();
 
             result.Should().BeEquivalentTo(new OkObjectResult(
                     new { names = new List<string> {"deck1", "deck2"}}
@@ -95,16 +94,16 @@ namespace DeckSorterTests
             get
             {
                 yield return new TestCaseData(anyDeckName, typeof(OkResult), true)
-                    .SetName("ReturnsOk_WhenNothingWrong");
+                    .SetName("ShouldReturnOk_WhenNothingWrong");
                 yield return new TestCaseData(anyDeckName, typeof(BadRequestObjectResult), false)
-                    .SetName("ReturnsBadRequest_WhenDeckNotInStorage");
+                    .SetName("ShouldReturnBadRequest_WhenDeckNotInStorage");
                 yield return new TestCaseData(forbiddenDeckName, typeof(BadRequestObjectResult), false)
-                    .SetName("ReturnsBadRequest_WhenDeckHasForbiddenName");
+                    .SetName("ShouldReturnBadRequest_WhenDeckHasForbiddenName");
             }
         }
         
         [TestCaseSource(nameof(DeleteCases))]
-        public void ControllerDeletesDeck(string deckName, Type expectedResultType, bool storageAlreadyContainsDeck)
+        public void DeleteDeckTest(string deckName, Type expectedResultType, bool storageAlreadyContainsDeck)
         {
             deckStorageMock.Setup(storage => storage.Delete(deckName))
                 .Returns(storageAlreadyContainsDeck);
@@ -119,16 +118,16 @@ namespace DeckSorterTests
             get
             {
                 yield return new TestCaseData(anyDeckName, typeof(OkObjectResult), true, true)
-                    .SetName("ReturnsOk_WhenNothingWrong");
+                    .SetName("ShouldReturnOk_WhenNothingWrong");
                 yield return new TestCaseData(anyDeckName, typeof(BadRequestObjectResult), false, false)
-                    .SetName("ReturnsBadRequest_WhenDeckNotInStorage");
+                    .SetName("ShouldReturnBadRequest_WhenDeckNotInStorage");
                 yield return new TestCaseData(forbiddenDeckName, typeof(BadRequestObjectResult), false, false)
-                    .SetName("ReturnsBadRequest_WhenDeckHasForbiddenName");
+                    .SetName("ShouldReturnBadRequest_WhenDeckHasForbiddenName");
             }
         }
         
         [TestCaseSource(nameof(ShuffleCases))]
-        public void ControllerShufflesDeck(string deckName, Type expectedResultType, bool storageAlreadyContainsDeck,
+        public void ShuffleDeckTest(string deckName, Type expectedResultType, bool storageAlreadyContainsDeck,
             bool isShuffleMethodInvoked)
         {
             deckStorageMock.Setup(storage => storage.Get(deckName))

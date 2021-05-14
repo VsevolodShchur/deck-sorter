@@ -18,7 +18,7 @@ namespace DeckSorter.Controllers
         }
 
         [HttpGet("names")]
-        public IActionResult GetDeckNames()
+        public IActionResult GetAllDeckNames()
         {
             return Ok(new {names = deckStorage.GetAll().Select(deck => deck.Name)});
         }
